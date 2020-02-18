@@ -1,30 +1,29 @@
 /* ************************************************************************** */
 /*                                                          LE - /            */
 /*                                                              /             */
-/*   ft_convert_c.c                                   .::    .:/ .      .::   */
+/*   ft_convert_x.c                                   .::    .:/ .      .::   */
 /*                                                 +:+:+   +:    +:  +:+:+    */
 /*   By: wperu <marvin@le-101.fr>                   +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
-/*   Created: 2020/01/10 08:34:11 by wperu        #+#   ##    ##    #+#       */
-/*   Updated: 2020/02/05 11:28:02 by wperu       ###    #+. /#+    ###.fr     */
+/*   Created: 2020/01/14 14:08:09 by wperu        #+#   ##    ##    #+#       */
+/*   Updated: 2020/01/26 01:55:02 by wperu       ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void	convert_char(t_infos *f, char c, int index)
+void	ft_convert_x(t_infos *f, unsigned long elem, int index)
 {
-	if (index == 0 || index == 1 || index == 5 || index == 4)
-	{
-		if (f->width > 1)
-			ft_imwidth(f, 1);
-		ft_write_cpt(f, c);
-	}
-	if (index == 2 || index == 3)
-	{
-		ft_write_cpt(f, c);
-		if (f->width > 1)
-			ft_imwidth(f, 1);
-	}
+	char	*str;
+	int		len;
+
+	str = (f->convt == 'x') ? ft_itoa_base(elem, 16, "0123456789abcdef") :
+		ft_itoa_base(elem, 16, "0123456789ABCDEF");
+	len = ft_strlen(str);
+	if (f->flagprec == 1 && f->prec == 0 && elem == 0)
+		len = 0;
+	ft_convert_nbr(f, str, index, len);
+	free(str);
+	str = NULL;
 }

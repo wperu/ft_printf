@@ -6,53 +6,38 @@
 /*   By: wperu <marvin@le-101.fr>                   +:+   +:    +:    +:+     */
 /*                                                 #+#   #+    #+    #+#      */
 /*   Created: 2019/12/12 09:46:31 by wperu        #+#   ##    ##    #+#       */
-/*   Updated: 2020/01/08 15:54:16 by wperu       ###    #+. /#+    ###.fr     */
+/*   Updated: 2020/01/26 02:04:04 by wperu       ###    #+. /#+    ###.fr     */
 /*                                                         /                  */
 /*                                                        /                   */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int ft_printf(const char *format, ...)
+int	ft_printf(const char *format, ...)
 {
-	int 	i;
+	int		i;
 	t_infos	*f;
-	int		index;
-
 
 	i = 0;
 	f = malloc(sizeof(*f));
-	if(!f)
-		return(-1);
-	va_start(f->arglist,format);
-//	printf("taille format =%d\n", ft_strlen((char*)format));
-	while(format[i])
+	if (!f)
+		return (-1);
+	f->ret = 0;
+	va_start(f->arglist, format);
+	while (format[i])
 	{
-		if(format[i] == '%')
+		if (format[i] == '%' && format[i + 1] != '\0')
 		{
 			ft_initstruct(f);
-			i = i + ft_checkflag((char*)format + i,f);
-		//	printf("i= %d\n",i);
-			index = ft_index_bin(f);
-		//	printf("index = %d\n",index);
-			ft_convert(f,index);
+			i = i + ft_checkflag((char*)format + i, f);
+			ft_convert(f);
 		}
-	//	printf("i = %d\n",i);
-		if(format[i] !='\0')
-		{
-			ft_write_cpt(f, format[i]);
-			i++;
-		}
+		if (format[i] != '\0' && format[i] != '%')
+			ft_write_cpt(f, format[i++]);
 	}
-	/*
-	printf("flagzero = %d\n",f->flagzero);
-	printf("flagtiret = %d\n",f->flagtiret);
-	printf("flagpoint = %d\n",f->flagpoint);
-	printf("flagstar = %d\n",f->flagstar);
-	printf("convt = %c\n",f->convt);
-	printf("lchamp = %d\n",f->lchamp);*/
 	va_end(f->arglist);
 	i = f->ret;
 	free(f);
+	f = NULL;
 	return (i);
 }
